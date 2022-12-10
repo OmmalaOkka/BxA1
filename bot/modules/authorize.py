@@ -1,6 +1,6 @@
 from telegram.ext import CommandHandler
 
-from bot import user_data, dispatcher, DATABASE_URL
+from bot import user_data, dispatcher, DATABASE_URL, PAID_USERS
 from bot.helper.telegram_helper.message_utils import sendMessage
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
@@ -77,7 +77,42 @@ def removeSudo(update, context):
         msg = "Give ID or Reply To message of whom you want to remove from Sudo"
     sendMessage(msg, context.bot, update.message)
 
+def addPaid(update, context):
+    user_id = ""
+    reply_message = update.message.reply_to_message
+    if len(context.args) == 1:
+        user_id = int(context.args[0])
+    elif reply_message:
+        user_id = reply_message.from_user.id
+    if user_id:
+        if user_id in PAID_USERS:
+            msg = 'Already a Paid User!'
+        elif DATABASE_URL is not None:
+            msg = DbManger().user_addpaid(user_id)
+            PAID_USERS.add(user_id)
+        else:
+            PAID_USERS.add(user_id)
+            msg = 'Promoted as Paid User'
+    else:
+        msg = "Give ID or Reply To message of whom you want to Promote as Paid User"
+    sendMessage(msg, context.bot, update.message)
 
+def removePaid(update, context):
+    user_id = ""
+    reply_message = update.message.reply_to_message
+    if len(context.args) == 1:
+        user_id = int(context.args[0])
+    elif reply_message:
+        user_id = reply_message.from_user.id
+    if user_id and user_id in PAID_USERS:
+        msg = DbManger().user_rmpaid(user_id) if DATABASE_URL is not None else 'Removed from Paid Subscription'
+        PAID_USERS.remove(user_id)
+    else:
+        msg = "Give ID or Reply To message of whom you want to remove from Paid User"
+    sendMessage(msg, context.bot, update.message)
+
+pdetails_handler = CommandHandler(command=BotCommands.PaidUsersCommand, callback=sendPaidDetails,
+                                    filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 authorize_handler = CommandHandler(BotCommands.AuthorizeCommand, authorize,
                                    filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 unauthorize_handler = CommandHandler(BotCommands.UnAuthorizeCommand, unauthorize,
@@ -86,8 +121,15 @@ addsudo_handler = CommandHandler(BotCommands.AddSudoCommand, addSudo,
                                    filters=CustomFilters.owner_filter, run_async=True)
 removesudo_handler = CommandHandler(BotCommands.RmSudoCommand, removeSudo,
                                    filters=CustomFilters.owner_filter, run_async=True)
+addpaid_handler = CommandHandler(command=BotCommands.AddPaidCommand, callback=addPaid,
+                                    filters=CustomFilters.owner_filter, run_async=True)
+removepaid_handler = CommandHandler(command=BotCommands.RmPaidCommand, callback=removePaid,
+                                    filters=CustomFilters.owner_filter, run_async=True)
 
+dispatcher.add_handler(pdetails_handler)
 dispatcher.add_handler(authorize_handler)
 dispatcher.add_handler(unauthorize_handler)
 dispatcher.add_handler(addsudo_handler)
 dispatcher.add_handler(removesudo_handler)
+dispatcher.add_handler(addpaid_handler)
+dispatcher.add_handler(removepaid_handler)
