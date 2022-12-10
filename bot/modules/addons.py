@@ -24,9 +24,6 @@ def prename_set(update, context):
         txt = ""
         prefix_ = txt
         PRE_DICT[user_id_] = prefix_
-        if DATABASE_URL:
-            DbManger().user_pre(user_id_, prefix_)
-            LOGGER.info(f"User : {user_id_} Prename is Saved in DB")
         editMessage(f"<b>{u_men} Prename for the file is done🎯</b>\n\n<b>Your Prename Text: </b><code>{txt}</code>", lm)
         
 def userlog_set(update, context):
@@ -57,27 +54,18 @@ def userlog_set(update, context):
 def caption_set(update, context):
     user_id_ = update.message.from_user.id 
     u_men = update.message.from_user.first_name
-    if user_id_ in PAID_USERS:
-        if (BotCommands.CaptionCommand in update.message.text) and (len(update.message.text.split(' ')) == 1):
-            sendMessage(f'<b>Set Caption Like👇 \n/{BotCommands.CaptionCommand}\n\n📥 JOIN : @MSPmoviesOffl</b>', context.bot, update.message)
-        else:
-            lm = sendMessage(f"<b>Please Wait....Processing👾</b>", context.bot, update.message)
-            pre_send = update.message.text.split(" ", maxsplit=1)
-            reply_to = update.message.reply_to_message
-            if len(pre_send) > 1:
-                txt = pre_send[1]
-            elif reply_to is not None:
-                txt = reply_to.text
-            else:
-                txt = ""
-            caption_ = txt
-            CAP_DICT[user_id_] = caption_
-            if DATABASE_URL:
-                DbManger().user_cap(user_id_, caption_)
-                LOGGER.info(f"User : {user_id_} Caption Saved in DB")
-            editMessage(f"<b>{u_men} Caption for the file is done🎯</b>\n\n<b>Your Caption Text: </b><code>{txt}</code>", lm)
+    lm = sendMessage(f"<b>Please Wait....Processing👾</b>", context.bot, update.message)
+    pre_send = update.message.text.split(" ", maxsplit=1)
+    reply_to = update.message.reply_to_message
+    if len(pre_send) > 1:
+        txt = pre_send[1]
+    elif reply_to is not None:
+        txt = reply_to.text
     else:
-        sendMessage(f"Buy Paid Service to use Feature.", context.bot, update.message)
+        txt = ""
+        caption_ = txt
+        CAP_DICT[user_id_] = caption_    
+        editMessage(f"<b>{u_men} Caption for the file is done🎯</b>\n\n<b>Your Caption Text: </b><code>{txt}</code>", lm)
         
 prename_set_handler = CommandHandler(BotCommands.PreNameCommand, prename_set,
                                        filters=(CustomFilters.authorized_chat | CustomFilters.authorized_user), run_async=True)
