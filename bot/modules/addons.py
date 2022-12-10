@@ -12,6 +12,7 @@ from bot.helper.ext_utils.db_handler import DbManger
 
 def prename_set(update, context):
     user_id_ = update.message.from_user.id 
+    u_men = update.message.from_user.first_name
     lm = sendMessage(f"<b>Please Wait....Processing👾</b>", context.bot, update.message)
     pre_send = update.message.text.split(" ", maxsplit=1)
     reply_to = update.message.reply_to_message
