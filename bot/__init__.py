@@ -27,6 +27,12 @@ basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 
 LOGGER = getLogger(__name__)
 
+PRE_DICT = {}
+LEECH_DICT = {}
+CAP_DICT = {}
+TIME_GAP_STORE = {}
+TIME_GAP = int(600)
+
 load_dotenv('config.env', override=True)
 
 Interval = []
