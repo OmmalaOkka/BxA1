@@ -143,6 +143,12 @@ if len(SUDO_USERS) != 0:
     for id_ in aid:
         user_data[int(id_.strip())] = {'is_sudo': True}
 
+PAID_USERS = environ.get('PAID_USERS', '')
+if len(PAID_USERS) != 0:
+    aid = PAID_USERS.split()
+    for id_ in aid:
+        user_data[int(id_.strip())] = {'is_paid': True}
+        
 EXTENSION_FILTER = environ.get('EXTENSION_FILTER', '')
 if len(EXTENSION_FILTER) > 0:
     fx = EXTENSION_FILTER.split()
@@ -315,6 +321,7 @@ config_dict = {'AS_DOCUMENT': AS_DOCUMENT,
                'MEGA_EMAIL_ID': MEGA_EMAIL_ID,
                'MEGA_PASSWORD': MEGA_PASSWORD,
                'OWNER_ID': OWNER_ID,
+               'PAID_USERS': PAID_USERS,
                'RSS_USER_SESSION_STRING': RSS_USER_SESSION_STRING,
                'RSS_CHAT_ID': RSS_CHAT_ID,
                'RSS_COMMAND': RSS_COMMAND,
