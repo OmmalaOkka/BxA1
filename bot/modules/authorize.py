@@ -111,6 +111,11 @@ def removePaid(update, context):
         msg = "Give ID or Reply To message of whom you want to remove from Paid User"
     sendMessage(msg, context.bot, update.message)
 
+def sendPaidDetails(update, context):
+    paid = ''
+    paid += '\n'.join(f"<code>{uid}</code>" for uid in PAID_USERS)
+    sendMessage(f'<b><u>Paid Users:</u></b>\n{paid}', context.bot, update.message)
+    
 pdetails_handler = CommandHandler(command=BotCommands.PaidUsersCommand, callback=sendPaidDetails,
                                     filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 authorize_handler = CommandHandler(BotCommands.AuthorizeCommand, authorize,
