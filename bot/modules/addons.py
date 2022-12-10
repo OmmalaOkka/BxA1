@@ -11,30 +11,22 @@ from bot.helper.ext_utils.db_handler import DbManger
 
 
 def prename_set(update, context):
-    user_id_ = update.message.from_user.id 
-    u_men = update.message.from_user.first_name
-    if user_id_ in PAID_USERS:
-        if (BotCommands.PreNameCommand in update.message.text) and (len(update.message.text.split(' ')) == 1):
-            sendMessage(f'<b>Set Prename Like👇 \n/{BotCommands.PreNameCommand} channelName</b>', context.bot, update.message)
-        else:
-            lm = sendMessage(f"<b>Please Wait....Processing👾</b>", context.bot, update.message)
-            pre_send = update.message.text.split(" ", maxsplit=1)
-            reply_to = update.message.reply_to_message
-            if len(pre_send) > 1:
-                txt = pre_send[1]
-            elif reply_to is not None:
-                txt = reply_to.text
-            else:
-                txt = ""
-            prefix_ = txt
-            PRE_DICT[user_id_] = prefix_
-            if DATABASE_URL:
-                DbManger().user_pre(user_id_, prefix_)
-                LOGGER.info(f"User : {user_id_} Prename is Saved in DB")
-            editMessage(f"<b>{u_men} Prename for the file is done🎯</b>\n\n<b>Your Prename Text: </b><code>{txt}</code>", lm)
+    lm = sendMessage(f"<b>Please Wait....Processing👾</b>", context.bot, update.message)
+    pre_send = update.message.text.split(" ", maxsplit=1)
+    reply_to = update.message.reply_to_message
+    if len(pre_send) > 1:
+        txt = pre_send[1]
+    elif reply_to is not None:
+        txt = reply_to.text
     else:
-        sendMessage(f"Buy Paid Service to use Feature.", context.bot, update.message)
-    
+        txt = ""
+        prefix_ = txt
+        PRE_DICT[user_id_] = prefix_
+        if DATABASE_URL:
+            DbManger().user_pre(user_id_, prefix_)
+            LOGGER.info(f"User : {user_id_} Prename is Saved in DB")
+        editMessage(f"<b>{u_men} Prename for the file is done🎯</b>\n\n<b>Your Prename Text: </b><code>{txt}</code>", lm)
+        
 def userlog_set(update, context):
     user_id_ = update.message.from_user.id 
     u_men = update.message.from_user.first_name
