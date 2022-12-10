@@ -34,8 +34,8 @@ class _BotCommands:
         self.UnAuthorizeCommand = f'unauthorize{CMD_PERFIX}'
         self.AddSudoCommand = f'addsudo{CMD_PERFIX}'
         self.RmSudoCommand = f'rmsudo{CMD_PERFIX}'
-        self.AddPaidCommand = f'addpaid{CMD_INDEX}'
-        self.RmPaidCommand = f'rmpaid{CMD_INDEX}'
+        self.AddPaidCommand = f'addpaid{CMD_PERFIX}'
+        self.RmPaidCommand = f'rmpaid{CMD_PERFIX}'
         self.PingCommand = f'ping{CMD_PERFIX}'
         self.RestartCommand = f'restart{CMD_PERFIX}'
         self.StatsCommand = f'stats{CMD_PERFIX}'
@@ -53,9 +53,9 @@ class _BotCommands:
         self.RssSubCommand = (f'rsssub{CMD_PERFIX}', f'rs{CMD_PERFIX}')
         self.RssUnSubCommand = (f'rssunsub{CMD_PERFIX}', f'rus{CMD_PERFIX}')
         self.RssSettingsCommand = (f'rssset{CMD_PERFIX}', f'rst{CMD_PERFIX}')
-        self.PreNameCommand = f'prename{CMD_INDEX}'
-        self.CaptionCommand = f'caption{CMD_INDEX}'
-        self.UserLogCommand = f'dumpid{CMD_INDEX}'
-        self.ScrapeCommand = f'scrape{CMD_INDEX}'
+        self.PreNameCommand = f'prename{CMD_PERFIX}'
+        self.CaptionCommand = f'caption{CMD_PERFIX}'
+        self.UserLogCommand = f'dumpid{CMD_PERFIX}'
+        self.ScrapeCommand = f'scrape{CMD_PERFIX}'
 
 BotCommands = _BotCommands()
