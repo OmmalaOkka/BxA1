@@ -29,10 +29,13 @@ class _BotCommands:
         self.SearchCommand = f'search{CMD_PERFIX}'
         self.StatusCommand = f'status{CMD_PERFIX}'
         self.UsersCommand = f'users{CMD_PERFIX}'
+        self.PaidUsersCommand = f'paid{CMD_INDEX}'
         self.AuthorizeCommand = f'authorize{CMD_PERFIX}'
         self.UnAuthorizeCommand = f'unauthorize{CMD_PERFIX}'
         self.AddSudoCommand = f'addsudo{CMD_PERFIX}'
         self.RmSudoCommand = f'rmsudo{CMD_PERFIX}'
+        self.AddPaidCommand = f'addpaid{CMD_INDEX}'
+        self.RmPaidCommand = f'rmpaid{CMD_INDEX}'
         self.PingCommand = f'ping{CMD_PERFIX}'
         self.RestartCommand = f'restart{CMD_PERFIX}'
         self.StatsCommand = f'stats{CMD_PERFIX}'
@@ -50,5 +53,9 @@ class _BotCommands:
         self.RssSubCommand = (f'rsssub{CMD_PERFIX}', f'rs{CMD_PERFIX}')
         self.RssUnSubCommand = (f'rssunsub{CMD_PERFIX}', f'rus{CMD_PERFIX}')
         self.RssSettingsCommand = (f'rssset{CMD_PERFIX}', f'rst{CMD_PERFIX}')
+        self.PreNameCommand = f'prename{CMD_INDEX}'
+        self.CaptionCommand = f'caption{CMD_INDEX}'
+        self.UserLogCommand = f'dumpid{CMD_INDEX}'
+        self.ScrapeCommand = f'scrape{CMD_INDEX}'
 
 BotCommands = _BotCommands()
