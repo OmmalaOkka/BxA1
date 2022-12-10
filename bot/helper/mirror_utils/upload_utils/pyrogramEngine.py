@@ -5,7 +5,7 @@ from pyrogram.errors import FloodWait, RPCError
 from PIL import Image
 from threading import RLock
 
-from bot import config_dict, user_data, GLOBAL_EXTENSION_FILTER, app
+from bot import config_dict, user_data, GLOBAL_EXTENSION_FILTER, app, PRE_DICT, LEECH_DICT, CAP_DICT
 from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, get_media_streams, clean_unwanted
 from bot.helper.ext_utils.bot_utils import get_readable_file_size
 
@@ -71,6 +71,28 @@ class TgUploader:
         self.__listener.onUploadComplete(None, size, self.__msgs_dict, self.__total_files, self.__corrupted, self.name)
 
     def __upload_file(self, up_path, file_, dirpath):
+        if file_.startswith('www'):
+            file_ = ' '.join(file_.split()[1:])
+        prefix = PRE_DICT.get(self.__listener.message.from_user.id, "")
+        PRENAME_X = prefix
+        if PRENAME_X is not None:
+            file_ = file_.strip('-').strip('_')
+            new_cap = f"{PRENAME_X}{file_}"
+            if new_cap.startswith('@'):
+                new_cap = ' '.join(new_cap.split()[1:])
+            cap_mono = f"<b>{new_cap.rsplit('.', 1)[0]}</b>"
+            file_ = f"{PRENAME_X}{file_}"
+            new_path = ospath.join(dirpath, file_)
+            osrename(up_path, new_path)
+            up_path = new_path
+        else:
+            cap_mono = f"{file_}"
+        caption = CAP_DICT.get(self.__listener.message.from_user.id, "")
+        CAPTION_X = caption
+        if len(CAPTION_X) != 0:
+            CX = f"<b>{CAPTION_X}</b>"  
+        else:
+            CX = ''
         if LEECH_FILENAME_PERFIX := config_dict['LEECH_FILENAME_PERFIX']:
             cap_mono = f"{LEECH_FILENAME_PERFIX} <code>{file_}</code>"
             file_ = f"{LEECH_FILENAME_PERFIX} {file_}"
@@ -106,7 +128,7 @@ class TgUploader:
                         up_path = new_path
                     self.__sent_msg = self.__sent_msg.reply_video(video=up_path,
                                                                   quote=True,
-                                                                  caption=cap_mono,
+                                                                  caption=cap_mono + CX,
                                                                   duration=duration,
                                                                   width=width,
                                                                   height=height,
@@ -118,7 +140,7 @@ class TgUploader:
                     duration , artist, title = get_media_info(up_path)
                     self.__sent_msg = self.__sent_msg.reply_audio(audio=up_path,
                                                                   quote=True,
-                                                                  caption=cap_mono,
+                                                                  caption=cap_mono + CX,
                                                                   duration=duration,
                                                                   performer=artist,
                                                                   title=title,
@@ -128,7 +150,7 @@ class TgUploader:
                 elif file_.upper().endswith(IMAGE_SUFFIXES):
                     self.__sent_msg = self.__sent_msg.reply_photo(photo=up_path,
                                                                   quote=True,
-                                                                  caption=cap_mono,
+                                                                  caption=cap_mono + CX,
                                                                   disable_notification=True,
                                                                   progress=self.__upload_progress)
                 else:
@@ -143,7 +165,7 @@ class TgUploader:
                 self.__sent_msg = self.__sent_msg.reply_document(document=up_path,
                                                                  quote=True,
                                                                  thumb=thumb,
-                                                                 caption=cap_mono,
+                                                                 caption=cap_mono + CX,
                                                                  disable_notification=True,
                                                                  progress=self.__upload_progress)
         except FloodWait as f:
