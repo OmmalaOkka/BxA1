@@ -29,7 +29,7 @@ class _BotCommands:
         self.SearchCommand = f'search{CMD_PERFIX}'
         self.StatusCommand = f'status{CMD_PERFIX}'
         self.UsersCommand = f'users{CMD_PERFIX}'
-        self.PaidUsersCommand = f'paid{CMD_INDEX}'
+        self.PaidUsersCommand = f'paid{CMD_PERFIX}'
         self.AuthorizeCommand = f'authorize{CMD_PERFIX}'
         self.UnAuthorizeCommand = f'unauthorize{CMD_PERFIX}'
         self.AddSudoCommand = f'addsudo{CMD_PERFIX}'
